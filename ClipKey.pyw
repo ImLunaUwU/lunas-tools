@@ -37,6 +37,7 @@ root.title("ClipKey")
 root.configure(bg='#326f78')
 root.geometry("360x90")
 root.resizable(False, False)
+root.attributes("-topmost", True)  # Set the window to be always on top
 
 buttons = [
     {"text": "15 sec", "key": "f13"},
