@@ -24,13 +24,14 @@ def right_click_with_delay(button, key, countdown, original_text):
         button.config(text=original_text)
         press_key(key)
 
-def click_animation(button):
+def click_animation(button, key):
     original_bg = button.cget("bg")
     original_text = button.cget("text")
     button.config(bg="gray", text="Pressed")
     button.update()
     time.sleep(1)
     button.config(bg=original_bg, text=original_text)
+    press_key(key)
 
 root = tk.Tk()
 root.title("ClipKey")
@@ -49,8 +50,8 @@ buttons = [
 for button_info in buttons:
     original_text = button_info["text"]
     button = tk.Button(root, text=original_text, command=lambda key=button_info["key"]: press_key(button_info["key"]), width=10, height=4, bg="#444444", fg="white")
-    button.bind("<Button-1>", lambda event, button=button: click_animation(button))
-    button.bind("<Button-3>", lambda event, button=button, key=button_info["key"], original_text=original_text: right_click_with_delay(button, key, 5, original_text))
+    button.bind("<ButtonPress-1>", lambda event, button=button, key=button_info["key"]: click_animation(button, key))
+    button.bind("<ButtonPress-3>", lambda event, button=button, key=button_info["key"], original_text=original_text: right_click_with_delay(button, key, 5, original_text))
     button.pack(side="left", padx=5, pady=5)
 
 root.mainloop()
