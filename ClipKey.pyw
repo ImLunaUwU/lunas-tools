@@ -2,7 +2,6 @@
 
 import tkinter as tk
 import subprocess
-import time
 
 def install_dependencies():
     subprocess.call(['pip', 'install', 'keyboard'])
@@ -23,22 +22,27 @@ def right_click_with_delay(button, key, countdown, original_text):
     else:
         button.config(text=original_text)
         press_key(key)
+        button.config(state="normal")
 
 def click_animation(button, key):
+    if button.cget("text") == "Pressed":
+        return
+    
     original_bg = button.cget("bg")
     original_text = button.cget("text")
-    button.config(bg="gray", text="Pressed")
-    button.update()
-    time.sleep(1)
-    button.config(bg=original_bg, text=original_text)
+    button.config(bg="gray", text="Pressed", state="disabled")
     press_key(key)
+    button.update()
+    
+    button.after(5000, lambda: button.config(bg=original_bg, text=original_text, state="normal"))
+
 
 root = tk.Tk()
 root.title("ClipKey")
 root.configure(bg='#326f78')
 root.geometry("360x90")
 root.resizable(False, False)
-root.attributes("-topmost", True)  # Set the window to be always on top
+root.attributes("-topmost", True)
 
 buttons = [
     {"text": "15 sec", "key": "f13"},
