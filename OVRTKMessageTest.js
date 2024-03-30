@@ -1,19 +1,20 @@
 const WebSocket = require('ws');
+const fs = require('fs');
 
 class APIObject {
-    constructor(messageType, json) {
+    constructor(messageType, jsonData) {
         this.messageType = messageType;
-        this.json = json;
+        this.json = jsonData;
     }
 }
 
 function sendAPIObject(messageType, jsonData) {
-    const apiObject = new APIObject(messageType, jsonData);
+    const jsonString = JSON.stringify(jsonData);
+    const apiObject = new APIObject(messageType, jsonString);
     const jsonMessage = JSON.stringify(apiObject);
     const socket = new WebSocket('ws://127.0.0.1:11450/api');
 
     socket.on('open', function (event) {
-        console.log('WebSocket connected');
         socket.send(jsonMessage);
     });
 
@@ -30,13 +31,14 @@ function sendAPIObject(messageType, jsonData) {
     });
 }
 
+const iconPath = './logo.png';
+const pngByteArray = fs.readFileSync(iconPath);
+
 const messageType = 'SendNotification';
 const jsonData = {
-    title: 'Test Title',
-    body: 'my balls itch',
-    icon: null
+    title: 'Cool title',
+    body: 'My cool body text!',
+    icon: [...pngByteArray]
 };
 
-const jsonString = JSON.stringify(jsonData);
-
-sendAPIObject(messageType, jsonString);
+sendAPIObject(messageType, jsonData);
