@@ -1,14 +1,11 @@
 import tkinter as tk
 import pyautogui
 
+# Set pyautogui pause to 0 to remove delays between actions
+pyautogui.PAUSE = 0
+
 def press_key_with_combo(key):
-    pyautogui.keyDown('ctrl')
-    pyautogui.keyDown('alt')
-    pyautogui.keyDown('shift')
     pyautogui.press(key)
-    pyautogui.keyUp('shift')
-    pyautogui.keyUp('alt')
-    pyautogui.keyUp('ctrl')
 
 def right_click_with_delay(button, key, countdown, original_text):
     if countdown > 0:
@@ -29,12 +26,17 @@ def click_animation(button, key):
     button.update()
     button.after(5000, lambda: button.config(bg=original_bg, text=original_text, state="normal"))
 
+def disable_alt_f4(event):
+    return "break"
+
 root = tk.Tk()
 root.title("ClipKey")
 root.configure(bg='#326f78')
 root.geometry("360x90")
 root.resizable(False, False)
 root.attributes("-topmost", True)
+
+root.bind("<Alt-F4>", disable_alt_f4)
 
 buttons = [
     {"text": "15 sec", "key": "f1"},
